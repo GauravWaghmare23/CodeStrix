@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Bug, ArrowLeft, Activity, Target, AlertTriangle, TrendingUp, Code2, Calendar, ClipboardCopy, ExternalLink, Terminal } from 'lucide-react';
+import { Bug, ArrowLeft, Activity, Target, AlertTriangle, TrendingUp, Code2, Calendar, ClipboardCopy, ExternalLink, Terminal, Sparkles } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from 'sonner';
@@ -82,9 +82,18 @@ export default function Dashboard() {
           <Bug className="h-5 w-5 text-primary" />
           <span className="text-lg font-bold">CodeStrix Analytics</span>
         </div>
-        <Button size="sm" variant="outline" onClick={() => navigate('/ide')} className="h-8 gap-2 bg-background/50 backdrop-blur-sm">
-          <ArrowLeft className="h-4 w-4" /> Back to Workspace
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button 
+            size="sm" 
+            className="h-8 bg-gradient-to-r from-primary to-primary-foreground/20 hover:scale-105 transition-transform font-bold text-[10px] uppercase tracking-wider"
+            onClick={() => navigate('/')}
+          >
+            <Sparkles className="h-3 w-3 mr-1.5" /> Upgrade to Pro
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate('/ide')} className="h-8 gap-2 bg-background/50 backdrop-blur-sm">
+            <ArrowLeft className="h-4 w-4" /> Back to Workspace
+          </Button>
+        </div>
       </header>
 
       <div className="mx-auto max-w-6xl px-6 py-10 space-y-10">

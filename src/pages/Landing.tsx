@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Bug, ArrowRight, Shield, Zap, Sparkles, Terminal } from 'lucide-react';
+import { Bug, ArrowRight, Shield, Zap, Sparkles, Terminal, Check } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Landing() {
@@ -18,6 +18,13 @@ export default function Landing() {
           <span className="text-xl font-black tracking-tighter uppercase whitespace-nowrap">CodeStrix</span>
         </div>
         <div className="flex items-center gap-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
+            Pricing
+          </Button>
           <Button variant="ghost" onClick={() => navigate('/docs')} className="text-sm font-medium hover:text-primary transition-colors">
             Documentation
           </Button>
@@ -66,7 +73,7 @@ export default function Landing() {
         </section>
 
         {/* Feature Cards */}
-        <section className="py-32 relative">
+        <section className="py-20 relative">
           <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -87,6 +94,43 @@ export default function Landing() {
                 title="Interactive Runtime"
                 description="Execute JavaScript directly in the browser with captured console output. Debugging has never been this fluid."
                 delay={600}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="py-32 relative overflow-hidden">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-4">Pricing Plans</h2>
+              <p className="text-4xl font-black tracking-tight sm:text-6xl text-foreground">
+                Scalable Intelligence for <br /> Every Engineer.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <PricingCard
+                name="Starter"
+                price="0"
+                description="Perfect for individual developers starting their journey."
+                features={["3 Active Projects", "Fundamental AI Analysis", "Standard Terminal", "Community Support"]}
+                delay={100}
+              />
+              <PricingCard
+                name="Professional"
+                price="19"
+                description="Advanced tools for professional engineers and power users."
+                features={["Unlimited Projects", "Full AI Auto-Fix Suite", "Advanced Python Engine", "Premium Web Container", "Priority Support"]}
+                isPopular
+                delay={300}
+              />
+              <PricingCard
+                name="Enterprise"
+                price="Custom"
+                description="Custom infrastructure for high-performance engineering teams."
+                features={["Universal Scale", "Custom AI Models", "SSO & Team Auth", "Dedicated Infrastructure", "99.9% Sla Support"]}
+                delay={500}
               />
             </div>
           </div>
@@ -120,6 +164,68 @@ function FeatureCard({ icon, title, description, delay }: { icon: React.ReactNod
       <div className="absolute bottom-0 right-0 p-8 opacity-0 group-hover:opacity-10 transition-opacity">
         <Sparkles className="h-12 w-12 text-primary" />
       </div>
+    </div>
+  );
+}
+
+function PricingCard({ 
+  name, 
+  price, 
+  description, 
+  features, 
+  isPopular = false,
+  delay = 0 
+}: { 
+  name: string, 
+  price: string, 
+  description: string, 
+  features: string[], 
+  isPopular?: boolean,
+  delay?: number
+}) {
+  return (
+    <div 
+      className={`relative group flex flex-col p-8 rounded-[2.5rem] border transition-all hover:-translate-y-2 animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both ${
+        isPopular 
+          ? 'bg-primary/5 border-primary/40 shadow-2xl shadow-primary/10 scale-105 z-10' 
+          : 'bg-card/20 border-border/50 hover:border-primary/20 hover:bg-card/40'
+      }`}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {isPopular && (
+        <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary-foreground shadow-xl">
+          Most Popular
+        </div>
+      )}
+
+      <div className="mb-8">
+        <h3 className="text-xl font-black uppercase tracking-widest mb-2 text-foreground/80">{name}</h3>
+        <div className="flex items-baseline gap-1">
+          <span className="text-4xl font-black">{price !== 'Custom' && '$'}{price}</span>
+          {price !== 'Custom' && <span className="text-muted-foreground font-bold italic">/mo</span>}
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground font-medium">{description}</p>
+      </div>
+
+      <ul className="space-y-4 mb-10 flex-1">
+        {features.map((feature, i) => (
+          <li key={i} className="flex items-start gap-3 text-sm font-semibold">
+            <div className={`mt-0.5 rounded-full p-1 ${isPopular ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}`}>
+              <Check className="h-3 w-3" strokeWidth={4} />
+            </div>
+            {feature}
+          </li>
+        ))}
+      </ul>
+
+      <Button 
+        variant={isPopular ? 'default' : 'outline'} 
+        className={`h-14 w-full rounded-2xl font-bold text-base transition-all ${
+          isPopular ? 'shadow-xl shadow-primary/20' : 'bg-background/40 backdrop-blur-md'
+        }`}
+      >
+        Get Started
+      </Button>
     </div>
   );
 }
