@@ -1,1 +1,10 @@
 project_id = "mneepulzenpagemvfxod"
+
+[functions.analyze-code]
+verify_jwt = false
+
+[functions.auto-fix]
+verify_jwt = false
+
+[functions.chat]
+verify_jwt = false
