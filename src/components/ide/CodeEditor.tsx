@@ -74,6 +74,14 @@ export default function CodeEditor({ code, language, onChange, issues }: CodeEdi
     monaco.editor.setModelMarkers(model, 'bugdetector', markers);
   }, [issues]);
 
+  useEffect(() => {
+    const handleFormat = () => {
+      editorRef.current?.getAction('editor.action.formatDocument')?.run();
+    };
+    window.addEventListener('formatActiveCode', handleFormat);
+    return () => window.removeEventListener('formatActiveCode', handleFormat);
+  }, []);
+
   const monacoLang = language === 'c++' ? 'cpp' : language;
 
   return (

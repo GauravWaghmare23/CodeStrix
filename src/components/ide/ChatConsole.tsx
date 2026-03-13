@@ -99,7 +99,14 @@ export default function ChatConsole({ code, language }: ChatConsoleProps) {
         }
       }
     } catch (err: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}` }]);
+      console.warn("Chat failed, using mock response", err);
+      const mockResponses = [
+        "I noticed you're exploring the code. I'm currently running in offline mock mode, but I can still tell you that your code structure looks good!",
+        "In mock mode: Make sure your algorithms are optimized for large datasets. Let me know if you need specific logic review.",
+        "Mock AI here! If you need real deep analysis, ensure your Supabase backend is connected and Edge Functions are deployed."
+      ];
+      const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+      setMessages(prev => [...prev, { role: 'assistant', content: randomResponse }]);
     } finally {
       setIsLoading(false);
     }

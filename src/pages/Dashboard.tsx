@@ -81,11 +81,11 @@ export default function Dashboard() {
 
       <div className="mx-auto max-w-5xl px-6 py-6 space-y-6">
         {/* Stat Cards */}
-        <div className="grid grid-cols-4 gap-4">
-          <StatCard icon={<Activity className="h-4 w-4 text-primary" />} label="Total Scans" value={totalScans} />
-          <StatCard icon={<AlertTriangle className="h-4 w-4 text-destructive" />} label="Total Bugs" value={totalBugs} />
-          <StatCard icon={<Target className="h-4 w-4 text-success" />} label="Avg Score" value={`${avgScore}/100`} />
-          <StatCard icon={<TrendingUp className="h-4 w-4 text-warning" />} label="Languages" value={new Set(analyses.map(a => a.language)).size} />
+        <div className="grid grid-cols-4 gap-6">
+          <StatCard icon={<Activity className="h-5 w-5 text-primary" />} label="Total Scans" value={totalScans} delay={100} />
+          <StatCard icon={<AlertTriangle className="h-5 w-5 text-destructive" />} label="Total Bugs" value={totalBugs} delay={200} />
+          <StatCard icon={<Target className="h-5 w-5 text-success" />} label="Avg Score" value={`${avgScore}/100`} delay={300} />
+          <StatCard icon={<TrendingUp className="h-5 w-5 text-warning" />} label="Languages" value={new Set(analyses.map(a => a.language)).size} delay={400} />
         </div>
 
         {/* Charts */}
@@ -149,14 +149,19 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) {
+function StatCard({ icon, label, value, delay = 0 }: { icon: React.ReactNode; label: string; value: string | number; delay?: number }) {
   return (
-    <div className="rounded-md border border-border bg-card p-4">
-      <div className="flex items-center gap-2 mb-2">
-        {icon}
-        <span className="text-xs text-muted-foreground">{label}</span>
+    <div 
+      className="rounded-xl border border-border/50 bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div className="p-2 bg-background rounded-lg shadow-sm border border-border/50">
+          {icon}
+        </div>
+        <span className="text-sm font-medium text-muted-foreground">{label}</span>
       </div>
-      <span className="text-2xl font-bold text-foreground">{value}</span>
+      <span className="text-3xl font-bold tracking-tight text-foreground">{value}</span>
     </div>
   );
 }
