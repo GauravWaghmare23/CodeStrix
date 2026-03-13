@@ -1,73 +1,46 @@
-# Welcome to your Lovable project
+# CodeStrix IDE
 
-## Project info
+CodeStrix is a professional-grade AI-powered IDE designed for building, debugging, and optimizing web applications with ease.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Key Features
 
-## How can I edit this code?
+- **Hierarchical Project Explorer**: Organize your files and folders with a professional recursive structure.
+- **Live Web Container**: Real-time previews for HTML/CSS/JS with a dedicated full-page mode.
+- **Pro Terminal**: High-fidelity system console with intelligent Python and JavaScript simulation.
+- **AI-Powered Analysis**: Integrated bug detection and one-click auto-fixes.
 
-There are several ways of editing your application.
+## Quick Start
 
-**Use Lovable**
+### Local Development
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+1. **Clone the repository**
+   ```sh
+   git clone <YOUR_GIT_URL>
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
 
-**Use your preferred IDE**
+3. **Start the development server**
+   ```sh
+   npm run dev
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Technologies
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend**: React, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui
+- **Icons**: Lucide React
+- **Editor**: Monaco Editor
 
-Follow these steps:
+## Deployment
 
+Build the production-ready application:
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+The output will be in the `dist` folder, ready for deployment to any static hosting service.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
