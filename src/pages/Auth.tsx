@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Bug, Shield, Zap } from 'lucide-react';
+import { Bug, Shield, Zap, ArrowLeft } from 'lucide-react';
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -36,13 +36,16 @@ export default function Auth() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-md space-y-8 px-6">
         {/* Logo */}
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="text-center space-y-2 relative">
+          <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="absolute left-0 top-0 h-8 gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Home
+          </Button>
+          <div className="flex items-center justify-center gap-2 mb-4 pt-4">
             <Bug className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold text-foreground">AI Bug Detector</h1>
+            <h1 className="text-2xl font-bold text-foreground">CodeStrix</h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            AI-powered code analysis and bug detection
+            AI-powered code analysis by CodeStrix
           </p>
         </div>
 

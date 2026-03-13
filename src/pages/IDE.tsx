@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Bug, Play, Wand2, LogOut, BarChart3, ChevronDown, ChevronUp, Sun, Moon, AlignLeft } from 'lucide-react';
+import { Bug, Play, Wand2, LogOut, BarChart3, ChevronDown, ChevronUp, Sun, Moon, AlignLeft, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
@@ -92,13 +92,45 @@ export default function IDE() {
   const [analyzing, setAnalyzing] = useState(false);
   const [fixing, setFixing] = useState(false);
   const [consoleOpen, setConsoleOpen] = useState(true);
+  const [output, setOutput] = useState('');
+  const [activeTab, setActiveTab] = useState<'chat' | 'output'>('chat');
 
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
     setCode(DEFAULT_CODE[lang] || '');
     setIssues([]);
     setQualityScore(null);
+    setOutput('');
   };
+
+  const runCode = useCallback(() => {
+    if (language !== 'javascript') {
+      toast.error('Local code execution is currently only supported for JavaScript.');
+      return;
+    }
+    
+    setActiveTab('output');
+    setConsoleOpen(true);
+    let logs: string[] = [];
+    
+    const originalLog = console.log;
+    console.log = (...args) => {
+      logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' '));
+      originalLog(...args);
+    };
+
+    try {
+      const exec = new Function(code);
+      exec();
+      if (logs.length === 0) logs.push('[Executed successfully with no output]');
+    } catch (err: any) {
+      logs.push(`Error: ${err.message}`);
+    } finally {
+      console.log = originalLog;
+      setOutput(logs.join('\n'));
+      toast.success('Code executed successfully');
+    }
+  }, [code, language]);
 
   const analyzeCode = useCallback(async () => {
     if (!code.trim()) {
@@ -213,7 +245,7 @@ export default function IDE() {
       <header className="flex items-center justify-between border-b border-border px-4 py-2">
         <div className="flex items-center gap-3">
           <Bug className="h-5 w-5 text-primary" />
-          <span className="text-sm font-bold text-foreground">AI Bug Detector</span>
+          <span className="text-sm font-bold text-foreground">CodeStrix</span>
           <Select value={language} onValueChange={handleLanguageChange}>
             <SelectTrigger className="h-7 w-32 bg-card border-border text-xs">
               <SelectValue />
@@ -228,7 +260,11 @@ export default function IDE() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={analyzeCode} disabled={analyzing} className="h-7 gap-1 text-xs">
+          <Button size="sm" onClick={runCode} className="h-7 gap-1 text-xs bg-success hover:bg-success/90 text-success-foreground">
+            <PlayCircle className="h-3.5 w-3.5" />
+            Run
+          </Button>
+          <Button size="sm" variant="outline" onClick={analyzeCode} disabled={analyzing} className="h-7 gap-1 text-xs">
             <Play className="h-3.5 w-3.5" />
             {analyzing ? 'Analyzing...' : 'Analyze'}
           </Button>
@@ -273,12 +309,20 @@ export default function IDE() {
           <Panel defaultSize={30} minSize={20}>
             <div className="flex flex-col h-full bg-card">
               <div className="flex items-center justify-between border-b border-border px-4 py-2 bg-card/50">
-                <span className="text-xs font-semibold text-muted-foreground">AI Toolchain</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-xs font-semibold text-muted-foreground mr-2">AI Toolchain</span>
+                  {consoleOpen && (
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => setActiveTab('chat')} className={`text-[10px] uppercase font-bold transition-colors ${activeTab === 'chat' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}>Chat</button>
+                      <button onClick={() => setActiveTab('output')} className={`text-[10px] uppercase font-bold transition-colors ${activeTab === 'output' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}>Output</button>
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={() => setConsoleOpen(!consoleOpen)}
                   className="flex items-center justify-center gap-1 text-[10px] uppercase font-bold text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {consoleOpen ? 'Hide Console' : 'Show Console'}
+                  {consoleOpen ? 'Hide' : 'Show'}
                   {consoleOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
                 </button>
               </div>
@@ -293,8 +337,16 @@ export default function IDE() {
                   <>
                     <PanelResizeHandle className="h-1 bg-border hover:bg-primary/50 transition-colors" />
                     <Panel defaultSize={50} minSize={30}>
-                      <div className="h-full overflow-hidden">
-                        <ChatConsole code={code} language={language} />
+                      <div className="h-full overflow-hidden flex flex-col">
+                        {activeTab === 'chat' ? (
+                          <ChatConsole code={code} language={language} />
+                        ) : (
+                          <div className="h-full flex flex-col bg-background text-foreground border-t border-border">
+                            <div className="p-3 font-mono text-sm whitespace-pre-wrap overflow-auto flex-1">
+                              {output || <span className="text-muted-foreground"># Execution output will appear here...</span>}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </Panel>
                   </>

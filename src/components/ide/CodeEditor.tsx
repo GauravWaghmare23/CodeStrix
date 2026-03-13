@@ -1,6 +1,7 @@
 import Editor, { OnMount } from '@monaco-editor/react';
 import { useRef, useEffect } from 'react';
 import type * as Monaco from 'monaco-editor';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface Issue {
   line: number;
@@ -26,6 +27,7 @@ const severityToSeverity = (severity: string): Monaco.MarkerSeverity => {
 };
 
 export default function CodeEditor({ code, language, onChange, issues }: CodeEditorProps) {
+  const { theme } = useTheme();
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<typeof Monaco | null>(null);
 
@@ -33,7 +35,7 @@ export default function CodeEditor({ code, language, onChange, issues }: CodeEdi
     editorRef.current = editor;
     monacoRef.current = monaco;
 
-    monaco.editor.defineTheme('bugdetector', {
+    monaco.editor.defineTheme('bugdetector-dark', {
       base: 'vs-dark',
       inherit: true,
       rules: [
@@ -53,8 +55,37 @@ export default function CodeEditor({ code, language, onChange, issues }: CodeEdi
         'editorCursor.foreground': '#3B82F6',
       },
     });
-    monaco.editor.setTheme('bugdetector');
+
+    monaco.editor.defineTheme('bugdetector-light', {
+      base: 'vs',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: '6E7781', fontStyle: 'italic' },
+        { token: 'keyword', foreground: 'CF222E' },
+        { token: 'string', foreground: '0A3069' },
+        { token: 'number', foreground: '0550AE' },
+        { token: 'type', foreground: '953800' },
+      ],
+      colors: {
+        'editor.background': '#FFFFFF',
+        'editor.foreground': '#24292F',
+        'editor.lineHighlightBackground': '#F6F8FA40',
+        'editorLineNumber.foreground': '#8C959F',
+        'editorLineNumber.activeForeground': '#24292F',
+        'editor.selectionBackground': '#BBDFFF40',
+        'editorCursor.foreground': '#0969DA',
+      },
+    });
+    
+    // Initial theme set handled by useEffect
   };
+
+  useEffect(() => {
+    if (monacoRef.current) {
+      const activeTheme = theme === 'dark' ? 'bugdetector-dark' : 'bugdetector-light';
+      monacoRef.current.editor.setTheme(activeTheme);
+    }
+  }, [theme]);
 
   useEffect(() => {
     if (!monacoRef.current || !editorRef.current) return;
@@ -71,8 +102,8 @@ export default function CodeEditor({ code, language, onChange, issues }: CodeEdi
       endColumn: model.getLineMaxColumn(issue.line) || 1,
     }));
 
-    monaco.editor.setModelMarkers(model, 'bugdetector', markers);
-  }, [issues]);
+    monaco.editor.setModelMarkers(model, theme === 'dark' ? 'bugdetector-dark' : 'bugdetector-light', markers);
+  }, [issues, theme]);
 
   useEffect(() => {
     const handleFormat = () => {
