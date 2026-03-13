@@ -51,6 +51,8 @@ CodeStrix is built on a cutting-edge stack to ensure performance, reliability, a
 - **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest) (React Query) for robust server state management.
 - **Icons**: [Lucide React](https://lucide.dev/) for a consistent, professional iconography system.
 
+  **Github Link**:https://www.canva.com/design/DAHDzOwyPIE/EfJ2TiuFEaIOWuyIzgj3hw/view?utm_content=DAHDzOwyPIE&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6d1287aaf1
+
 ## 🚀 Getting Started
 
 ### Prerequisites
