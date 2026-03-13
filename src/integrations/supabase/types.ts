@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          language: string
+          quality_score: number | null
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          language?: string
+          quality_score?: number | null
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          language?: string
+          quality_score?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      issues: {
+        Row: {
+          analysis_id: string
+          created_at: string
+          description: string
+          fix: string | null
+          id: string
+          line: number
+          severity: string
+          type: string
+        }
+        Insert: {
+          analysis_id: string
+          created_at?: string
+          description: string
+          fix?: string | null
+          id?: string
+          line: number
+          severity?: string
+          type?: string
+        }
+        Update: {
+          analysis_id?: string
+          created_at?: string
+          description?: string
+          fix?: string | null
+          id?: string
+          line?: number
+          severity?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "issues_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
